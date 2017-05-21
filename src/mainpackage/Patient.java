@@ -9,9 +9,8 @@ import mainpackage.Doctor.DoctorSpec;
 public class Patient extends User {
 	private int amka;
 	
-	public Patient(String username, String password, int amka) {
+	public Patient(String username, String password) {
 		super(username, password);
-		this.amka = amka;
 	}
 
 	public boolean register() {

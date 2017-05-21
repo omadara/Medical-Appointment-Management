@@ -15,7 +15,7 @@ public abstract class User {
 	
 	public boolean login() {
 		System.out.println("Login...");
-		return true;
+		return false;
 	}
 	
 	public void logout() {
