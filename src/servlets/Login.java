@@ -13,8 +13,12 @@ import mainpackage.Patient;
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		showForm(request, response, "");
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
@@ -32,14 +36,14 @@ public class Login extends HttpServlet {
 		//apo8hkeush tou session gia na menei logged in
 		HttpSession session = request.getSession();
 		session.setAttribute("patient-info", pat);
-		
-		//TODO show patient page.....
+		session.setMaxInactiveInterval(60*60);//one hour
+		response.sendRedirect("menu.html");
 	}
 
 	/**
 	 *	shows the form with info message
 	 */
-	private void showForm(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
+	public static void showForm(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
 		response.addHeader("Cache-Control", "no-cache");
 		request.setAttribute("message", message);
 		request.getRequestDispatcher("index.jsp").forward(request, response);
@@ -47,10 +51,6 @@ public class Login extends HttpServlet {
 
 	private boolean isEmpty(String input) {
 		return input == null || input.trim().isEmpty();
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 }

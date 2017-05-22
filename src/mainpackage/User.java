@@ -1,11 +1,31 @@
 package mainpackage;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 public abstract class User {
 	public static int usersCounter = 0;
-	private String username;
-	private String password;
-	private String name;
-	private String surname;
+	protected static Connection con;
+	static{
+		try {
+			InitialContext context = new InitialContext();
+			DataSource source = (DataSource) context.lookup("java:comp/env/jdbc/postgres");
+			con = source.getConnection();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	protected int id;
+	protected String username;
+	protected String password;
+	protected String name;
+	protected String surname;
 	
 	public User(String username, String password) {
 		this.username = username;
