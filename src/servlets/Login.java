@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import database.Accounts;
 import mainpackage.Patient;
 
 @WebServlet("/Login")
@@ -26,9 +27,9 @@ public class Login extends HttpServlet {
 			showForm(request, response, "Empty Username or Password");
 			return;
 		}
-		
-		Patient pat = new Patient(username, password);
-		if(!pat.login()) {
+
+		Patient pat = Accounts.getPatient(username, password);
+		if(pat == null) {
 			showForm(request, response, "Incorrect Credentials");
 			return;
 		}

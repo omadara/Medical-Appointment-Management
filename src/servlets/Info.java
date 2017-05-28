@@ -20,6 +20,7 @@ public class Info extends HttpServlet {
 			Login.showForm(request, response, "Please login first");
 			return;
 		}
+		
 		Patient pat = (Patient)session.getAttribute("patient-info");
 		response.setContentType("text/html");
 		response.getWriter().println("<!DOCTYPE html>\r\n" + 
