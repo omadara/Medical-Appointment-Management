@@ -21,12 +21,7 @@ public class History extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if(session == null || !session.getAttributeNames().hasMoreElements()) {
-			Login.showForm(request, response, "Please login first");
-			return;
-		}
-		
-		Patient pat = (Patient)session.getAttribute("patient-info");
+		Patient pat = (Patient)session.getAttribute("user-info");
 		List<Appointment> aps = Scheduler.getAppointmentHistory(pat);
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();

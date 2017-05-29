@@ -27,7 +27,7 @@ public class Login extends HttpServlet {
 			showForm(request, response, "Empty Username or Password");
 			return;
 		}
-
+		
 		Patient pat = Accounts.getPatient(username, password);
 		if(pat == null) {
 			showForm(request, response, "Incorrect Credentials");
@@ -36,7 +36,7 @@ public class Login extends HttpServlet {
 		
 		//apo8hkeush tou session gia na menei logged in
 		HttpSession session = request.getSession();
-		session.setAttribute("patient-info", pat);
+		session.setAttribute("user-info", pat);
 		session.setMaxInactiveInterval(60*60);//one hour
 		response.sendRedirect("menu.html");
 	}
