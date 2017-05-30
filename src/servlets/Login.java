@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,15 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import database.Accounts;
 import mainpackage.Patient;
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		showForm(request, response, "");
-	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
@@ -27,17 +25,18 @@ public class Login extends HttpServlet {
 			return;
 		}
 		
-		Patient pat = new Patient(username, password);
-		if(!pat.login()) {
+		//NOTE: prepei na anagnorizei an ekane login ws patien, doctor h admin kai oxi mono patient
+		Patient pat = Accounts.getPatient(username, password);
+		if(pat == null) {
 			showForm(request, response, "Incorrect Credentials");
 			return;
 		}
 		
 		//apo8hkeush tou session gia na menei logged in
 		HttpSession session = request.getSession();
-		session.setAttribute("patient-info", pat);
+		session.setAttribute("user-info", pat);
 		session.setMaxInactiveInterval(60*60);//one hour
-		response.sendRedirect("menu.html");
+		request.getRequestDispatcher("patient.jsp").forward(request, response);
 	}
 
 	/**
@@ -46,7 +45,7 @@ public class Login extends HttpServlet {
 	public static void showForm(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
 		response.addHeader("Cache-Control", "no-cache");
 		request.setAttribute("message", message);
-		request.getRequestDispatcher("index.jsp").forward(request, response);
+		request.getRequestDispatcher("login.jsp").forward(request, response);
 	}
 
 	private boolean isEmpty(String input) {
