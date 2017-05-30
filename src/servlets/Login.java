@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,6 +29,7 @@ public class Login extends HttpServlet {
 			return;
 		}
 		
+		//NOTE: prepei na anagnorizei an ekane login ws patien, doctor h admin kai oxi mono patient
 		Patient pat = Accounts.getPatient(username, password);
 		if(pat == null) {
 			showForm(request, response, "Incorrect Credentials");
@@ -38,7 +40,7 @@ public class Login extends HttpServlet {
 		HttpSession session = request.getSession();
 		session.setAttribute("user-info", pat);
 		session.setMaxInactiveInterval(60*60);//one hour
-		response.sendRedirect("menu.html");
+		response.sendRedirect("Patient_Home");
 	}
 
 	/**
@@ -47,7 +49,7 @@ public class Login extends HttpServlet {
 	public static void showForm(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
 		response.addHeader("Cache-Control", "no-cache");
 		request.setAttribute("message", message);
-		request.getRequestDispatcher("index.jsp").forward(request, response);
+		request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
 	}
 
 	private boolean isEmpty(String input) {

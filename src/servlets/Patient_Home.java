@@ -9,12 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/Info")
-public class Info extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
+@WebServlet("/Patient_Home")
+public class Patient_Home extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/pages/patient_info.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/pages/patient.jsp");
 		rd.forward(request, response);
 	}
 
