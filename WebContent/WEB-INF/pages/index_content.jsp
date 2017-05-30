@@ -1,4 +1,5 @@
 	<!-- CONTENT HERE -->
-	WELCOME MESSAGE HERE!<br>
-	MD INDEX PAGE<br>
-	<h1>JUVENTUS FTW</h1>
+	WELCOME!<br>
+	Please login or register<br>
+	...<br>
+	...<br>

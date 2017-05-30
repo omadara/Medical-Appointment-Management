@@ -54,12 +54,42 @@ nav li a {
 
 article {
 	margin-left: 40px;
+	margin-right:40px;
 	border-left: 1px solid black;
-	padding: 1em;
+	border-right: 1px solid black;
+	padding: 3em;
 	overflow: hidden;
 	font-size:20px;
+	font-family:serif, sans-serif;
+	background-color:#f8dcdc;
 }
+
 article h3{
 	text-decoration: underline;
 }
 
+article table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+article th,td {
+    text-align: left;
+    padding: 8px;
+}
+article tr:nth-child(even){
+	background-color: #f2f2f2
+}
+
+article tr:nth-child(odd){
+	background-color: #ceced5
+}
+article th {
+    background-color: #a40000;
+    color: white;
+}
+
+#info-message {
+	color:red;
+	font-weight: bold;
+}
