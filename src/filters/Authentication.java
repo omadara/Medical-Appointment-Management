@@ -1,6 +1,7 @@
 package filters;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -19,21 +20,15 @@ import servlets.Login;
  */
 @WebFilter("/*" )
 public class Authentication implements Filter {
+	private final String[] visibles = { "/Login", "", "/login.jsp",  "/index.jsp"};
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest)request;
 		HttpServletResponse res = (HttpServletResponse)response;
-
-		//user is trying to login(aka access login servlet)
-		System.out.println(req.getServletPath());
-		if (req.getServletPath().toLowerCase().equals("/login")) {
-			chain.doFilter(request, response);
-			return;
-		}
-		///dont filter index and resources/*
-		if(req.getServletPath().toLowerCase().equals("")
-				||req.getServletPath().toLowerCase().equals("/index.jsp")
-				||req.getServletPath().toLowerCase().matches("^/resources/.+")){
+		
+		//don't filter those
+		String reqURL = req.getServletPath().toLowerCase();
+		if(isVisible(reqURL) || reqURL.startsWith("/resources/")) {
 			chain.doFilter(request, response);
 			return;
 		}
@@ -47,6 +42,13 @@ public class Authentication implements Filter {
 			chain.doFilter(request, response);			
 		}
 	}
+	
+	private boolean isVisible(String reqURL) {
+		for(String s : visibles)
+			if(s.toLowerCase().equals(reqURL)) return true;
+		return false;
+	}
+	
 	//NOTE: min ta svisete, m petaei error xoris auta
 	public void init(FilterConfig conf){ ;}
 	public void destroy(){ ;}
