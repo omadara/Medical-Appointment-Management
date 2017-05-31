@@ -29,6 +29,12 @@ public class Authentication implements Filter {
 		HttpServletRequest req = (HttpServletRequest)request;
 		HttpServletResponse res = (HttpServletResponse)response;
 		HttpSession session = req.getSession(false);
+	
+		// gia na pernei ola request apo ton server kai oxi apo tin cache tou browser
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.setHeader("Pragma", "no-cache");
+        res.setDateHeader("Expires", 0);
+        
 		String reqURL = req.getServletPath().toLowerCase();
 		boolean loggedIn = session != null && session.getAttribute("user-info") != null;
 		boolean visibleURL = isVisible(reqURL) || reqURL.startsWith("/resources/");
