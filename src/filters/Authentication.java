@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import mainpackage.Doctor;
+import mainpackage.Patient;
+import mainpackage.User;
 import servlets.Login;
 
 /**
@@ -20,27 +23,32 @@ import servlets.Login;
  */
 @WebFilter("/*" )
 public class Authentication implements Filter {
-	private final String[] visibles = { "/Login", "", "/login.jsp",  "/index.jsp"};
+	private final String[] visibles = { "/Login", "/login.jsp",  "/index.jsp"};
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest)request;
 		HttpServletResponse res = (HttpServletResponse)response;
-		
-		//don't filter those
+		HttpSession session = req.getSession(false);
 		String reqURL = req.getServletPath().toLowerCase();
-		if(isVisible(reqURL) || reqURL.startsWith("/resources/")) {
-			chain.doFilter(request, response);
+		boolean loggedIn = session != null && session.getAttribute("user-info") != null;
+		boolean visibleURL = isVisible(reqURL) || reqURL.startsWith("/resources/");
+		
+		if(!loggedIn && !visibleURL) {
+			Login.showForm(req, res, "Please login first.");
 			return;
 		}
 		
-		//check if user is logged in
-		HttpSession session = req.getSession(false);
-		if(session == null || session.getAttribute("user-info") == null) {
-			Login.showForm(req, res, "Please login first.");
-		}else{ 
-			//hes logged in, let him pass
-			chain.doFilter(request, response);			
+		//dei3e to swsto homepage analoga me ton user
+		if(loggedIn && reqURL.equals("/index.jsp")) {
+			User user = (User)session.getAttribute("user-info");
+			if(user instanceof Patient)
+				reqURL = "/patient.jsp";
+			//...ta ypoloipa homepages pane edw...
+			req.getRequestDispatcher(reqURL).forward(request, response);
+			return;
 		}
+		
+		chain.doFilter(request, response);
 	}
 	
 	private boolean isVisible(String reqURL) {
