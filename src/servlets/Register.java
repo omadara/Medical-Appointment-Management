@@ -27,7 +27,7 @@ public class Register extends HttpServlet {
 				isEmpty(request.getParameter("surname"))
 				){
 			showForm(request,response,"One or more fields are empty");
-		}
+		}else{
 		Patient pat = new Patient();
 		pat.setAmka(request.getParameter("AMKA"));
 		pat.setUsername(request.getParameter("username"));
@@ -38,7 +38,7 @@ public class Register extends HttpServlet {
 			showForm(request,response,"AMKA or username already in use");
 		}
 		request.getRequestDispatcher("index.jsp").forward(request, response);
-		
+		}
 	}
 	
 
