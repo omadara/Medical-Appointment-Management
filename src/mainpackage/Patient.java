@@ -2,7 +2,9 @@ package mainpackage;
 
 public class Patient extends User {
 	private String amka;
-	
+	public Patient(){
+		super();
+	}
 	public Patient(int id, String username, String password, String amka, String name, String surname) {
 		super(id, username, password);
 		this.amka = amka;

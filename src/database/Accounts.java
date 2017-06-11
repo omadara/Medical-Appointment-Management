@@ -57,7 +57,20 @@ public class Accounts {
 	}
 	
 	public static boolean register(Patient pat) {
-		return false;
+		try {
+			PreparedStatement  stm2 = con.prepareStatement("INSERT INTO PATIENT(AMKA,username,password,name,surname) VALUES( ?, ?, ?, ?, ?)");
+			stm2.setString(1, pat.getAmka());
+			stm2.setString(2, pat.getUsername());
+			stm2.setString(3, pat.getPassword());
+			stm2.setString(4, pat.getName());
+			stm2.setString(5, pat.getSurname());
+			stm2.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	public boolean register(Doctor doc) {
