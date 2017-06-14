@@ -16,7 +16,6 @@ import mainpackage.Appointment;
 import mainpackage.Availability;
 import mainpackage.Doctor;
 import mainpackage.Patient;
-import mainpackage.Doctor.DoctorSpec;
 
 public class Scheduler {
 	private static PreparedStatement stm1, stm2, stm3;
@@ -70,10 +69,10 @@ public class Scheduler {
 		return null;
 	}
 
-	public static List<Availability> getAvailableDoctors(DoctorSpec spec) {
+	public static List<Availability> getAvailableDoctors(String spec) {
 		try {
 			List<Availability> avs = new ArrayList<>();
-			stm2.setString(1, spec.toString().toLowerCase());
+			stm2.setString(1, spec.toLowerCase());
 			ResultSet rs = stm2.executeQuery();
 			while(rs.next()) {
 				Doctor doc = new Doctor();
@@ -122,7 +121,7 @@ public class Scheduler {
 		return false;
 	}
 	
-	public static boolean makeAppointment(Patient pat, DoctorSpec spec, Date date) {
+	public static boolean makeAppointment(Patient pat, String spec, Date date) {
 		return false;
 	}
 	
@@ -138,7 +137,7 @@ public class Scheduler {
 		return null;
 	}
 	
-	public static List<Appointment> search(DoctorSpec spec) {
+	public static List<Appointment> search(String spec) {
 		return null;
 	}
 	

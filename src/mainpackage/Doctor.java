@@ -1,23 +1,19 @@
 package mainpackage;
 
 public class Doctor extends User {
-	public enum DoctorSpec {
-		Pathologos, Ofthalmiatros, Orthopedikos
-	}
+	private String speciality;
 	
-	private DoctorSpec speciality;
-		
 	public Doctor() { }
-	public Doctor(int id, String username, String password, DoctorSpec spciality) {
+	public Doctor(int id, String username, String password, String spciality) {
 		super(id, username, password);
 		this.speciality = spciality;
 	}
 
-	public DoctorSpec getSpeciality() {
+	public String getSpeciality() {
 		return speciality;
 	}
 
-	public void setSpeciality(DoctorSpec speciality) {
+	public void setSpeciality(String speciality) {
 		this.speciality = speciality;
 	}
 	
