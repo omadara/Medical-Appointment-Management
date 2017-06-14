@@ -18,10 +18,15 @@ public class Accounts {
 	private static PreparedStatement stm1, stm2;
 	private static Connection con;
 	static{
+		initialize();
+	}
+	
+	private static void initialize() {
 		try {
 			InitialContext context = new InitialContext();
 			DataSource src = (DataSource) context.lookup("java:comp/env/jdbc/postgres");
 			con = src.getConnection();
+			//statements
 			stm1 = con.prepareStatement("SELECT * FROM patient WHERE username = ? AND password = ?");
 			stm2 = con.prepareStatement("INSERT INTO PATIENT(AMKA,username,password,name,surname) VALUES( ?, ?, ?, ?, ?)");
 		} catch (NamingException e) {
@@ -72,11 +77,11 @@ public class Accounts {
 		}
 	}
 	
-	public boolean register(Doctor doc) {
+	public static boolean register(Doctor doc) {
 		return false;
 	}
 	
-	public boolean ban(User user) {
+	public static boolean ban(User user) {
 		return false;
 	}
 	
