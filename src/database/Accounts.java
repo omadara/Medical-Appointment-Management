@@ -15,7 +15,7 @@ import mainpackage.Patient;
 import mainpackage.User;
 
 public class Accounts {
-	private static PreparedStatement stm1;
+	private static PreparedStatement stm1, stm2;
 	private static Connection con;
 	static{
 		try {
@@ -23,6 +23,7 @@ public class Accounts {
 			DataSource src = (DataSource) context.lookup("java:comp/env/jdbc/postgres");
 			con = src.getConnection();
 			stm1 = con.prepareStatement("SELECT * FROM patient WHERE username = ? AND password = ?");
+			stm2 = con.prepareStatement("INSERT INTO PATIENT(AMKA,username,password,name,surname) VALUES( ?, ?, ?, ?, ?)");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -58,7 +59,6 @@ public class Accounts {
 	
 	public static boolean register(Patient pat) {
 		try {
-			PreparedStatement  stm2 = con.prepareStatement("INSERT INTO PATIENT(AMKA,username,password,name,surname) VALUES( ?, ?, ?, ?, ?)");
 			stm2.setString(1, pat.getAmka());
 			stm2.setString(2, pat.getUsername());
 			stm2.setString(3, pat.getPassword());
@@ -67,7 +67,6 @@ public class Accounts {
 			stm2.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}

@@ -43,7 +43,6 @@ public class Login extends HttpServlet {
 	 *	shows the form with info message
 	 */
 	public static void showForm(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
-		response.addHeader("Cache-Control", "no-cache");
 		request.setAttribute("message", message);
 		request.getRequestDispatcher("login.jsp").forward(request, response);
 	}

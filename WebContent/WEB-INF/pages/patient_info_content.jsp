@@ -2,7 +2,7 @@
 <%
 Patient pat = (Patient)session.getAttribute("user-info");
 %>
-	<table border="1">
+	<table>
 		<tr><td>Username</td><td><%= pat.getUsername() %></td></tr>
 		<tr><td>AMKA</td><td><%= pat.getAmka() %></td></tr>
 		<tr><td>Name</td><td><%= pat.getName() %></td></tr>

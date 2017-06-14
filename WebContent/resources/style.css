@@ -71,6 +71,7 @@ article h3{
 article table {
     border-collapse: collapse;
     width: 100%;
+    border: 1px solid;
 }
 
 article th,td {
