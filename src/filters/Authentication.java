@@ -23,7 +23,7 @@ import servlets.Login;
  */
 @WebFilter("/*" )
 public class Authentication implements Filter {
-	private final String[] visibles = { "/Login", "/login.jsp",  "/index.jsp", "/register.jsp", "/Register"};
+	private final String[] visibles = { "/Login", "/login.jsp",  "/index.jsp", "/register.jsp", "/Register", "/about.jsp"};
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest)request;
@@ -53,9 +53,7 @@ public class Authentication implements Filter {
 			req.getRequestDispatcher(reqURL).forward(request, response);
 			return;
 		}
-		
 		chain.doFilter(request, response);
-		
 	}
 	
 	private boolean isVisible(String reqURL) {
