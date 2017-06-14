@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.sql.PreparedStatement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

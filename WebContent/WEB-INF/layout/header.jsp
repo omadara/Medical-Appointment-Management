@@ -1,6 +1,6 @@
 	<header>
-		<a href="${pageContext.request.contextPath}">
+		<a href="index.jsp">
 		 <img id="logo" src="resources/logo.png"/>
 		 </a>
-		 <h1><a href="${pageContext.request.contextPath}">MEDICAL DEPARTMENT</a></h1>
+		 <h1><a href="index.jsp">MEDICAL DEPARTMENT</a></h1>
 	</header>

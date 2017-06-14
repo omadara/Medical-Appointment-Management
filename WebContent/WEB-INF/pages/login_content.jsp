@@ -1,8 +1,5 @@
 	<div id="info-message">
-		<%
-			String s = (String)request.getAttribute("message");
-			if(s != null) out.print(s);
-		%>
+		${message}
 	</div>
 	<form action="Login" method="POST">
 		<label>Username:</label>
