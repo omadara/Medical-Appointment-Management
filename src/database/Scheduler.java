@@ -72,7 +72,7 @@ public class Scheduler {
 	public static List<Availability> getAvailableDoctors(String spec) {
 		try {
 			List<Availability> avs = new ArrayList<>();
-			stm2.setString(1, spec.toLowerCase());
+			stm2.setString(1, spec);
 			ResultSet rs = stm2.executeQuery();
 			while(rs.next()) {
 				Doctor doc = new Doctor();

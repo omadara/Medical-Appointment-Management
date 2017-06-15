@@ -15,7 +15,7 @@ import mainpackage.Patient;
 import mainpackage.User;
 
 public class Accounts {
-	private static PreparedStatement stm1, stm2;
+	private static PreparedStatement stm1, stm2, stm3, stm4;
 	private static Connection con;
 	static{
 		initialize();
@@ -29,6 +29,8 @@ public class Accounts {
 			//statements
 			stm1 = con.prepareStatement("SELECT * FROM patient WHERE username = ? AND password = ?");
 			stm2 = con.prepareStatement("INSERT INTO PATIENT(AMKA,username,password,name,surname) VALUES( ?, ?, ?, ?, ?)");
+			stm3 = con.prepareStatement("SELECT * FROM doctor WHERE username = ? AND password = ?");
+			stm4 = con.prepareStatement("SELECT * FROM admin WHERE username = ? AND password = ?");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -55,10 +57,43 @@ public class Accounts {
 	}
 	
 	public static Doctor getDoctor(String username, String password) {
+		try {
+			stm3.setString(1, username);
+			stm3.setString(2, password);
+			ResultSet rs = stm3.executeQuery();
+			if (rs.next()) {
+				int id = rs.getInt(1);
+				String name = rs.getString("name");
+				String surname = rs.getString("surname");
+				String spec = rs.getString("spec");
+				Doctor d = new Doctor(id, username, password, spec);
+				d.setName(name);
+				d.setSurname(surname);
+				return d;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
 	public static Admin getAdmin(String username, String password) {
+		try {
+			stm4.setString(1, username);
+			stm4.setString(2, password);
+			ResultSet rs = stm4.executeQuery();
+			if (rs.next()) {
+				int id = rs.getInt(1);
+				String name = rs.getString("name");
+				String surname = rs.getString("surname");
+				Admin a = new Admin(id, username, password);
+				a.setName(name);
+				a.setSurname(surname);
+				return a;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	

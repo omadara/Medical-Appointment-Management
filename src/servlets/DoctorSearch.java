@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import database.Scheduler;
 import mainpackage.Availability;
 
-@WebServlet("/NewAppointment")
-public class NewAppointment extends HttpServlet {
+@WebServlet("/DoctorSearch")
+public class DoctorSearch extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,7 +24,7 @@ public class NewAppointment extends HttpServlet {
 			return;
 		}
 		
-		List<Availability> doctors =  Scheduler.getAvailableDoctors(spec);
+		List<Availability> doctors =  Scheduler.getAvailableDoctors(spec.toLowerCase());
 		request.setAttribute("doctors", doctors);
 		request.getRequestDispatcher("patient_newAppointment.jsp").forward(request, response);
 	}

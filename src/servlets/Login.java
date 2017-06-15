@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import database.Accounts;
-import mainpackage.Patient;
+import mainpackage.User;
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
@@ -20,23 +20,32 @@ public class Login extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String type = request.getParameter("type");
 		if(isEmpty(username) || isEmpty(password)) {
 			showForm(request, response, "Empty Username or Password");
 			return;
+		}else if(!"patient".equals(type) && !"doctor".equals(type) && !"admin".equals(type)) {
+			showForm(request, response, "Invalid account type");
+			return;
 		}
 		
-		//NOTE: prepei na anagnorizei an ekane login ws patien, doctor h admin kai oxi mono patient
-		Patient pat = Accounts.getPatient(username, password);
-		if(pat == null) {
+		User user = null;
+		switch(type) {
+		case "patient": user = Accounts.getPatient(username, password);break;
+		case "doctor": user = Accounts.getDoctor(username, password);break;
+		case "admin": user = Accounts.getAdmin(username, password);break;
+		}
+		if(user == null) {
 			showForm(request, response, "Incorrect Credentials");
 			return;
 		}
 		
 		//apo8hkeush tou session gia na menei logged in
 		HttpSession session = request.getSession();
-		session.setAttribute("user-info", pat);
+		session.setAttribute("user-info", user);
 		session.setMaxInactiveInterval(60*60);//one hour
-		request.getRequestDispatcher("patient.jsp").forward(request, response);
+		//phgene ton sto homepage tou analoga me to typo user
+		request.getRequestDispatcher(type+".jsp").forward(request, response);
 	}
 
 	/**

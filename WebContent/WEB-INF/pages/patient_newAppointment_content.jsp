@@ -3,14 +3,16 @@
 	${message}
 </div>
 <% List<Availability> doctors = (List<Availability>)request.getAttribute("doctors");
-if(doctors==null || doctors.isEmpty()) {%>
+if(doctors==null) {%>
 	<b>Search doctors by specialty:</b><br>
-	<form action="NewAppointment" method="POST">
+	<form action="DoctorSearch" method="POST">
 	  <input type="radio" name="spec" value="pathologos" checked> Pathologos<br>
 	  <input type="radio" name="spec" value="ofthalmiatros"> Ofthalmiatros<br>
 	  <input type="radio" name="spec" value="orthopedikos"> Orthopedikos<br>
 	  <input type="submit" value="Search"/>
-	</form> 
+	</form>
+<%}else if(doctors.isEmpty()) {%>
+	<i>No doctor available with that specialty.</i>
 <%}else{%>
 	<table>
 	<tr><th>Doctor's name</th><th>Doctor's surname</th><th>At</th><th>Until</th></tr>
