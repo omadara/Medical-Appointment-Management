@@ -1,3 +1,4 @@
 /build/
 .settings/org.eclipse.wst.ws.service.policy.prefs
 WebContent/META-INF/context.xml
+.classpath
