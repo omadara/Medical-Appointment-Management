@@ -1,7 +1,7 @@
 	<div id="info-message">
 		${message}
 	</div>
-	<form action="RegisterDoctor" method="POST">
+	<form action="${pageContext.request.contextPath}/RegisterDoctor" method="POST">
 		<input type="radio" name="spec" value="pathologos" checked> Pathologos<br>
 	  	<input type="radio" name="spec" value="ofthalmiatros"> Ofthalmiatros<br>
 	  	<input type="radio" name="spec" value="orthopedikos"> Orthopedikos<br>

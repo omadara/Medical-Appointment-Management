@@ -5,7 +5,7 @@
 <% List<Availability> doctors = (List<Availability>)request.getAttribute("doctors");
 if(doctors==null) {%>
 	<b>Search doctors by specialty:</b><br>
-	<form action="DoctorSearch" method="POST">
+	<form action="${pageContext.request.contextPath}/DoctorSearch" method="POST">
 	  <input type="radio" name="spec" value="pathologos" checked> Pathologos<br>
 	  <input type="radio" name="spec" value="ofthalmiatros"> Ofthalmiatros<br>
 	  <input type="radio" name="spec" value="orthopedikos"> Orthopedikos<br>

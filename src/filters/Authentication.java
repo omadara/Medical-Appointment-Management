@@ -25,6 +25,7 @@ import servlets.Login;
 @WebFilter("/*" )
 public class Authentication implements Filter {
 	private final String[] visibles = { "/Login", "/login.jsp",  "/index.jsp", "/register.jsp", "/Register", "/about.jsp"};
+	private enum UserType{ADMIN,DOCTOR,PATIENT};
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest)request;
@@ -37,26 +38,47 @@ public class Authentication implements Filter {
 		res.setDateHeader("Expires", 0);
         
 		String reqURL = req.getServletPath().toLowerCase();
-		boolean loggedIn = session != null && session.getAttribute("user-info") != null;
+		User user = session!=null ? (User)session.getAttribute("user-info") : null;
+		boolean loggedIn = user != null;
 		boolean visibleURL = isVisible(reqURL) || reqURL.startsWith("/resources/");
+		UserType type = null;
+		if(user!=null && user instanceof Patient) type = UserType.PATIENT;
+		else if(user!=null && user instanceof Doctor) type = UserType.DOCTOR;
+		else if(user!=null && user instanceof Admin) type = UserType.ADMIN;
 		
+		if(!loggedIn && visibleURL) {
+			chain.doFilter(request, response);
+			return;
+		}
 		if(!loggedIn && !visibleURL) {
 			Login.showForm(req, res, "Please login first.");
 			return;
 		}
 		
 		//dei3e to swsto homepage analoga me ton user
-		if(loggedIn && reqURL.equals("/index.jsp")) {
-			User user = (User)session.getAttribute("user-info");
-			if(user instanceof Patient) reqURL = "/patient.jsp";
-			else if(user instanceof Doctor) reqURL = "/doctor.jsp";
-			else if(user instanceof Admin) reqURL = "/admin.jsp";
+		if(reqURL.equals("/index.jsp")) {
+			if(type == UserType.PATIENT) reqURL = "/patient/index.jsp";
+			else if(type == UserType.DOCTOR) reqURL = "/doctor/index.jsp";
+			else if(type == UserType.ADMIN) reqURL = "/admin/index.jsp";
 			req.getRequestDispatcher(reqURL).forward(request, response);
 			return;
 		}
+		
+		//apetrepse tous patient na vlepoun selides twn doctor/admin ktlp
+		if(!isAuthorized(type, reqURL)) {
+			res.sendError(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+		
 		chain.doFilter(request, response);
 	}
 	
+	private boolean isAuthorized(UserType type, String reqURL) {
+		return (type == UserType.PATIENT && !reqURL.startsWith("/admin/") && !reqURL.startsWith("/doctor/"))
+				|| (type == UserType.DOCTOR && !reqURL.startsWith("/admin/") && !reqURL.startsWith("/patient/"))
+				|| (type == UserType.ADMIN && !reqURL.startsWith("/patient/") && !reqURL.startsWith("/doctor/"));
+	}
+
 	private boolean isVisible(String reqURL) {
 		for(String s : visibles)
 			if(s.toLowerCase().equals(reqURL)) return true;

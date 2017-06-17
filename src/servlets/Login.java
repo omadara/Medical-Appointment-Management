@@ -45,7 +45,7 @@ public class Login extends HttpServlet {
 		session.setAttribute("user-info", user);
 		session.setMaxInactiveInterval(60*60);//one hour
 		//phgene ton sto homepage tou analoga me to typo user
-		request.getRequestDispatcher(type+".jsp").forward(request, response);
+		request.getRequestDispatcher(type+"/index.jsp").forward(request, response);
 	}
 
 	/**

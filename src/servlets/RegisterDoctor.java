@@ -48,7 +48,7 @@ public class RegisterDoctor extends HttpServlet {
 	 */
 	public static void showForm(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
 		request.setAttribute("message", message);
-		request.getRequestDispatcher("add.jsp").forward(request, response);
+		request.getRequestDispatcher("admin/add.jsp").forward(request, response);
 	}
 
 	private boolean isEmpty(String input) {

@@ -1,7 +1,7 @@
 	<div id="info-message">
 		${message}
 	</div>
-	<form action="Login" method="POST">
+	<form action="${pageContext.request.contextPath}/Login" method="POST">
 		<label>Username:</label>
 		<input type="text" name="username"> <br>
 		<label>Password:</label>

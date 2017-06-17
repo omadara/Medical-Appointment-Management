@@ -4,7 +4,7 @@
 <html>
 <head>
 <title>${param.title}</title>
-<link rel="stylesheet" type="text/css"	href="resources/style.css" />
+<link rel="stylesheet" type="text/css"	href="${pageContext.request.contextPath}/resources/style.css" />
 </head>
 <body>
 	<jsp:include page="/WEB-INF/layout/header.jsp"/>

@@ -1,7 +1,7 @@
 	<div id="info-message">
 		${message}
 	</div>
-	<form action="Register" method="POST">
+	<form action="${pageContext.request.contextPath}/Register" method="POST">
 		<label>AMKA:</label>
 		<input type="text" name="AMKA"> <br>
 		<label>Username:</label>

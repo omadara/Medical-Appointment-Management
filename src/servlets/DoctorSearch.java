@@ -20,13 +20,13 @@ public class DoctorSearch extends HttpServlet {
 		String spec = request.getParameter("spec");
 		if(!isValid(spec)) {
 			request.setAttribute("message", "Invalid doctor spec");
-			request.getRequestDispatcher("patient_newAppointment.jsp").forward(request, response);
+			request.getRequestDispatcher("patient/newAppointment.jsp").forward(request, response);
 			return;
 		}
 		
 		List<Availability> doctors =  Scheduler.getAvailableDoctors(spec.toLowerCase());
 		request.setAttribute("doctors", doctors);
-		request.getRequestDispatcher("patient_newAppointment.jsp").forward(request, response);
+		request.getRequestDispatcher("patient/newAppointment.jsp").forward(request, response);
 	}
 
 	private boolean isValid(String spec) {

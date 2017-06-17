@@ -42,7 +42,7 @@ public class Register extends HttpServlet {
 		HttpSession session = request.getSession();
 		session.setAttribute("user-info", pat);
 		session.setMaxInactiveInterval(60*60);//one hour
-		request.getRequestDispatcher("patient.jsp").forward(request, response);
+		request.getRequestDispatcher("patient/index.jsp").forward(request, response);
 	}
 	
 
