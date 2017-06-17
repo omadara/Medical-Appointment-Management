@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import mainpackage.Admin;
 import mainpackage.Doctor;
 import mainpackage.Patient;
 import mainpackage.User;
@@ -32,8 +33,8 @@ public class Authentication implements Filter {
 	
 		// gia na pernei ola request apo ton server kai oxi apo tin cache tou browser
 		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        res.setHeader("Pragma", "no-cache");
-        res.setDateHeader("Expires", 0);
+		res.setHeader("Pragma", "no-cache");
+		res.setDateHeader("Expires", 0);
         
 		String reqURL = req.getServletPath().toLowerCase();
 		boolean loggedIn = session != null && session.getAttribute("user-info") != null;
@@ -47,9 +48,9 @@ public class Authentication implements Filter {
 		//dei3e to swsto homepage analoga me ton user
 		if(loggedIn && reqURL.equals("/index.jsp")) {
 			User user = (User)session.getAttribute("user-info");
-			if(user instanceof Patient)
-				reqURL = "/patient.jsp";
-			//...ta ypoloipa homepages pane edw...
+			if(user instanceof Patient) reqURL = "/patient.jsp";
+			else if(user instanceof Doctor) reqURL = "/doctor.jsp";
+			else if(user instanceof Admin) reqURL = "/admin.jsp";
 			req.getRequestDispatcher(reqURL).forward(request, response);
 			return;
 		}

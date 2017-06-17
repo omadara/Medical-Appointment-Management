@@ -1,6 +1,6 @@
-<%@ page import="mainpackage.Patient" %>
-<% Patient pat = (Patient)session.getAttribute("user-info"); 
-String name = pat.getName();
+<%@ page import="mainpackage.User" %>
+<% User user = (User)session.getAttribute("user-info"); 
+String name = user.getName();
 session.invalidate(); %>
 
 <jsp:include page="/WEB-INF/layout/template.jsp">

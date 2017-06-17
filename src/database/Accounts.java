@@ -15,7 +15,7 @@ import mainpackage.Patient;
 import mainpackage.User;
 
 public class Accounts {
-	private static PreparedStatement stm1, stm2, stm3, stm4;
+	private static PreparedStatement stm1, stm2, stm3, stm4, stm5;
 	private static Connection con;
 	static{
 		initialize();
@@ -31,6 +31,7 @@ public class Accounts {
 			stm2 = con.prepareStatement("INSERT INTO PATIENT(AMKA,username,password,name,surname) VALUES( ?, ?, ?, ?, ?)");
 			stm3 = con.prepareStatement("SELECT * FROM doctor WHERE username = ? AND password = ?");
 			stm4 = con.prepareStatement("SELECT * FROM admin WHERE username = ? AND password = ?");
+			stm5 = con.prepareStatement("INSERT INTO doctor(username,password,name,surname,spec) VALUES( ?, ?, ?, ?, ?)");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -113,7 +114,18 @@ public class Accounts {
 	}
 	
 	public static boolean register(Doctor doc) {
-		return false;
+		try {
+			stm5.setString(1, doc.getUsername());
+			stm5.setString(2, doc.getPassword());
+			stm5.setString(3, doc.getName());
+			stm5.setString(4, doc.getSurname());
+			stm5.setString(5, doc.getSpeciality());
+			stm5.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	public static boolean ban(User user) {
