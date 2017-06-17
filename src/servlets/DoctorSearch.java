@@ -23,8 +23,8 @@ public class DoctorSearch extends HttpServlet {
 			request.getRequestDispatcher("patient/newAppointment.jsp").forward(request, response);
 			return;
 		}
-		
-		List<Availability> doctors =  Scheduler.getAvailableDoctors(spec.toLowerCase());
+		//TODO na parnei tis imerominies apo to POST
+		List<Availability> doctors =  Scheduler.getAvailableDoctors(spec.toLowerCase(), "2017-06-17 00:00:00", "2017-06-22 23:59:59");
 		request.setAttribute("doctors", doctors);
 		request.getRequestDispatcher("patient/newAppointment.jsp").forward(request, response);
 	}
