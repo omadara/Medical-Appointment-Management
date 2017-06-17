@@ -128,7 +128,7 @@ public class Accounts {
 	 public static boolean deleteDoc(String username){
 		try{
 			stm6 = con.prepareStatement("DELETE FROM doctor WHERE username = ?");
-			stm6.setString(2, username);
+			stm6.setString(1, username);
 			stm6.execute();
 			return true;
 		} catch (SQLException e) {
@@ -141,7 +141,7 @@ public class Accounts {
 	 public static boolean deletePatient(String username) {
 		 try{
 			 stm6 = con.prepareStatement("DELETE FROM patient WHERE username = ?");
-			 stm6.setString(2, username);
+			 stm6.setString(1, username);
 			 stm6.execute();
 			 return true;
 		 } catch (SQLException e) {
