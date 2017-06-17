@@ -30,18 +30,23 @@ public class Scheduler {
 			DataSource src = (DataSource) context.lookup("java:comp/env/jdbc/postgres");
 			con = src.getConnection();
 			//statements
-			stm1 = con.prepareStatement("SELECT d.name as name,d.surname as surname,a.date_t as date\r\n"
-					+ "FROM patient as p INNER JOIN appointments as a ON p.id = a.patient_id \r\n"
-					+ "INNER JOIN doctor as d ON a.doctor_id = d.id\r\n"
-					+ "WHERE p.id = ? AND a.date_t < CURRENT_DATE\r\n" + "ORDER BY a.date_t");	
-			stm2 = con.prepareStatement("SELECT d.surname,d.name,a.start_t as start,a.end_t as end\r\n" + 
-					"FROM doctor as d INNER JOIN availables as a ON d.id=a.doctor_id\r\n" + 
-					"WHERE d.spec = ? AND end_t > current_date\r\n" + 
-					"ORDER BY d.surname,d.name;");
-			stm3 = con.prepareStatement("SELECT d.name as name,d.surname as surname,a.date_t as date\r\n" + 
-					"FROM patient as p INNER JOIN appointments as a ON p.id = a.patient_id INNER JOIN doctor as d ON a.doctor_id = d.id\r\n" + 
-					"WHERE p.id = ? AND a.date_t >= CURRENT_DATE\r\n" + 
-					"ORDER BY a.date_t;");
+			stm1 = con.prepareStatement(
+					  "SELECT d.name as name,d.surname as surname,a.d as date \n"
+					+ "FROM appointments as a INNER JOIN patient as p ON p.username = a.pat_username \n"
+					+ "INNER JOIN doctor as d ON a.doc_username = d.username \n"
+					+ "WHERE p.username = ? AND a.d < CURRENT_DATE \n"
+					+ "ORDER BY a.d");
+			stm2 = con.prepareStatement(
+					  "SELECT d.surname,d.name,a.d_start as start,a.d_end as end \n"
+					+ "FROM doctor as d NATURAL JOIN availabillity as a \n"
+					+ "WHERE d.spec::varchar = ? AND a.d_end > current_date \n"
+					+ "ORDER BY d.surname,d.name;");
+			stm3 = con.prepareStatement(
+					  "SELECT d.name as name,d.surname as surname,a.d as date \n"
+					+ "FROM appointments as a INNER JOIN patient as p ON p.username = a.pat_username \n"
+					+ "INNER JOIN doctor as d ON a.doc_username = d.username \n"
+					+ "WHERE p.username = ? AND a.d >= CURRENT_DATE \n"
+					+ "ORDER BY a.d;");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -52,7 +57,7 @@ public class Scheduler {
 	public static List<Appointment> getAppointmentHistory(Patient pat) {
 		try {
 			List<Appointment> aps = new ArrayList<>();
-			stm1.setInt(1, pat.getId());
+			stm1.setString(1, pat.getUsername());
 			ResultSet rs = stm1.executeQuery();
 			while(rs.next()) {
 				Doctor doc = new Doctor();
@@ -92,7 +97,7 @@ public class Scheduler {
 	public static List<Appointment> getSchedule(Patient pat) {
 		try {
 			List<Appointment> aps = new ArrayList<>();
-			stm3.setInt(1, pat.getId());
+			stm3.setString(1, pat.getUsername());
 			ResultSet rs = stm3.executeQuery();
 			while(rs.next()) {
 				Doctor doc = new Doctor();

@@ -28,7 +28,7 @@ public class Accounts {
 			con = src.getConnection();
 			//statements
 			stm1 = con.prepareStatement("SELECT * FROM patient WHERE username = ? AND password = ?");
-			stm2 = con.prepareStatement("INSERT INTO PATIENT(AMKA,username,password,name,surname) VALUES( ?, ?, ?, ?, ?)");
+			stm2 = con.prepareStatement("INSERT INTO PATIENT(amka,username,password,name,surname) VALUES( ?, ?, ?, ?, ?)");
 			stm3 = con.prepareStatement("SELECT * FROM doctor WHERE username = ? AND password = ?");
 			stm4 = con.prepareStatement("SELECT * FROM admin WHERE username = ? AND password = ?");
 			stm5 = con.prepareStatement("INSERT INTO doctor(username,password,name,surname,spec) VALUES( ?, ?, ?, ?, ?)");
@@ -45,11 +45,10 @@ public class Accounts {
 			stm1.setString(2, password);
 			ResultSet rs = stm1.executeQuery();
 			if (rs.next()) {
-				int id = rs.getInt(1);
 				String amka = rs.getString("amka");
 				String name = rs.getString("name");
 				String surname = rs.getString("surname");
-				return new Patient(id, username, password, amka, name, surname);
+				return new Patient(username, password, amka, name, surname);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -63,11 +62,10 @@ public class Accounts {
 			stm3.setString(2, password);
 			ResultSet rs = stm3.executeQuery();
 			if (rs.next()) {
-				int id = rs.getInt(1);
 				String name = rs.getString("name");
 				String surname = rs.getString("surname");
 				String spec = rs.getString("spec");
-				Doctor d = new Doctor(id, username, password, spec);
+				Doctor d = new Doctor(username, password, spec);
 				d.setName(name);
 				d.setSurname(surname);
 				return d;
@@ -84,10 +82,9 @@ public class Accounts {
 			stm4.setString(2, password);
 			ResultSet rs = stm4.executeQuery();
 			if (rs.next()) {
-				int id = rs.getInt(1);
 				String name = rs.getString("name");
 				String surname = rs.getString("surname");
-				Admin a = new Admin(id, username, password);
+				Admin a = new Admin(username, password);
 				a.setName(name);
 				a.setSurname(surname);
 				return a;

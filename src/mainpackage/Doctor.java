@@ -4,8 +4,8 @@ public class Doctor extends User {
 	private String speciality;
 	
 	public Doctor() { }
-	public Doctor(int id, String username, String password, String spciality) {
-		super(id, username, password);
+	public Doctor(String username, String password, String spciality) {
+		super(username, password);
 		this.speciality = spciality;
 	}
 

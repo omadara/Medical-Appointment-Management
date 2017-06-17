@@ -2,28 +2,18 @@ package mainpackage;
 
 public abstract class User {
 	public static int usersCounter = 0;
-	protected int id;
 	protected String username;
 	protected String password;
 	protected String name;
 	protected String surname;
 	
 	public User() { }
-	public User(int id, String username, String password) {
-		this.id = id;
+	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
 		usersCounter++;
 	}
 	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getUsername() {
 		return username;
 	}
