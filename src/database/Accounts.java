@@ -15,7 +15,7 @@ import mainpackage.Patient;
 import mainpackage.User;
 
 public class Accounts {
-	private static PreparedStatement stm1, stm2, stm3, stm4, stm5, stm6;
+	private static PreparedStatement stm1, stm2, stm3, stm4, stm5, stm6, stm7;
 	private static Connection con;
 	static{
 		initialize();
@@ -31,7 +31,9 @@ public class Accounts {
 			stm2 = con.prepareStatement("INSERT INTO PATIENT(amka,username,password,name,surname) VALUES( ?, ?, ?, ?, ?)");
 			stm3 = con.prepareStatement("SELECT * FROM doctor WHERE username = ? AND password = ?");
 			stm4 = con.prepareStatement("SELECT * FROM admin WHERE username = ? AND password = ?");
-			stm5 = con.prepareStatement("INSERT INTO doctor(username,password,name,surname,spec) VALUES( ?, ?, ?, ?, ?)");
+			stm5 = con.prepareStatement("INSERT INTO doctor(username,password,name,surname,spec) VALUES( ?, ?, ?, ?, ?::specialty)");
+			stm6 = con.prepareStatement("DELETE FROM doctor WHERE username = ?");
+			stm7 = con.prepareStatement("DELETE FROM patient WHERE username = ?");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -127,23 +129,18 @@ public class Accounts {
 	
 	 public static boolean deleteDoc(String username){
 		try{
-			stm6 = con.prepareStatement("DELETE FROM doctor WHERE username = ?");
 			stm6.setString(1, username);
-			stm6.execute();
-			return true;
+			return stm6.executeUpdate() == 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
-		
 	}
 	 
 	 public static boolean deletePatient(String username) {
 		 try{
-			 stm6 = con.prepareStatement("DELETE FROM patient WHERE username = ?");
-			 stm6.setString(1, username);
-			 stm6.execute();
-			 return true;
+			 stm7.setString(1, username);
+			 return stm7.executeUpdate() == 1;
 		 } catch (SQLException e) {
 			 e.printStackTrace();
 			 return false;

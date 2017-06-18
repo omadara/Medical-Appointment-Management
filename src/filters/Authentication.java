@@ -17,7 +17,7 @@ import mainpackage.Admin;
 import mainpackage.Doctor;
 import mainpackage.Patient;
 import mainpackage.User;
-import servlets.Login;
+import servlets.ServletUtils;
 
 /**
  * This filters applies to all URL requests and filters out non authenticated users.
@@ -51,7 +51,7 @@ public class Authentication implements Filter {
 			return;
 		}
 		if(!loggedIn && !visibleURL) {
-			Login.showForm(req, res, "Please login first.");
+			ServletUtils.showForm(req, res, "Please login first.", "login.jsp");
 			return;
 		}
 		

@@ -29,20 +29,17 @@ CREATE TABLE patient (
 );
 
 CREATE TABLE availabillity(
-	username varchar(32) NOT NULL,
+	username varchar(32) REFERENCES doctor(username) ON DELETE CASCADE,
 	d_start timestamp NOT NULL,
 	d_end timestamp NOT NULL,
-	PRIMARY KEY(username, d_start, d_end),
-	FOREIGN KEY(username) REFERENCES doctor(username)
+	PRIMARY KEY(username, d_start, d_end)
 );
 
 CREATE TABLE appointments (
-	doc_username varchar(32) NOT NULL,
-	pat_username varchar(32) NOT NULL,
+	doc_username varchar(32) REFERENCES doctor(username) ON DELETE CASCADE,
+	pat_username varchar(32) REFERENCES patient(username) ON DELETE CASCADE,
 	d timestamp NOT NULL,
-	PRIMARY KEY(doc_username,pat_username, d),
-	FOREIGN KEY(doc_username) REFERENCES doctor(username),
-	FOREIGN KEY(pat_username) REFERENCES patient(username)
+	PRIMARY KEY(doc_username,pat_username, d)
 );
 
 INSERT INTO admin (username, password, name, surname)
@@ -71,13 +68,11 @@ INSERT INTO doctor (username, password, spec, name, surname)
 	VALUES ('docc0', 'pass', 'pathologos', 'rrr', 'PPP');
 
 INSERT INTO availabillity (username, d_start, d_end)
-	VALUES ('docc', to_timestamp('18-06-2017 09:30', 'DD-MM-YYYY hh24:mi'),to_timestamp('18-06-2017 15:30', 'DD-MM-YYYY hh24:mi'));
+	VALUES ('docc', to_timestamp('18-06-2017 09:30', 'DD-MM-YYYY hh24:mi'),to_timestamp('18-06-2017 10:30', 'DD-MM-YYYY hh24:mi'));
 INSERT INTO availabillity (username, d_start, d_end)
-	VALUES ('docc2', to_timestamp('18-06-2017 09:30', 'DD-MM-YYYY hh24:mi'),to_timestamp('18-06-2017 19:00', 'DD-MM-YYYY hh24:mi'));
+	VALUES ('docc2', to_timestamp('18-06-2017 09:30', 'DD-MM-YYYY hh24:mi'),to_timestamp('18-06-2017 10:30', 'DD-MM-YYYY hh24:mi'));
 INSERT INTO availabillity (username, d_start, d_end)
-	VALUES ('docc2', to_timestamp('28-06-2017 09:30', 'DD-MM-YYYY hh24:mi'),to_timestamp('28-06-2017 20:30', 'DD-MM-YYYY hh24:mi'));
-INSERT INTO availabillity (username, d_start, d_end)
-	VALUES ('docc2', to_timestamp('19-06-2017 09:30', 'DD-MM-YYYY hh24:mi'),to_timestamp('19-06-2017 19:30', 'DD-MM-YYYY hh24:mi'));
+	VALUES ('docc0', to_timestamp('18-06-2017 09:30', 'DD-MM-YYYY hh24:mi'),to_timestamp('18-06-2017 11:30', 'DD-MM-YYYY hh24:mi'));
 INSERT INTO availabillity (username, d_start, d_end)
 	VALUES ('docc0', to_timestamp('19-06-2017 09:30', 'DD-MM-YYYY hh24:mi'),to_timestamp('19-06-2017 19:30', 'DD-MM-YYYY hh24:mi'));
 INSERT INTO availabillity (username, d_start, d_end)
@@ -97,15 +92,3 @@ INSERT INTO appointments(doc_username, pat_username, d)
 	VALUES ('docc0', 'asth1', to_timestamp('20-06-2017 10:00', 'DD-MM-YYYY hh24:mi'));
 INSERT INTO appointments(doc_username, pat_username, d)
 	VALUES ('docc0', 'asth1', to_timestamp('21-06-2017 15:00', 'DD-MM-YYYY hh24:mi'));
-INSERT INTO appointments(doc_username, pat_username, d)
-	VALUES ('docc0', 'wea', to_timestamp('20-06-2017 18:00', 'DD-MM-YYYY hh24:mi'));
-INSERT INTO appointments(doc_username, pat_username, d)
-	VALUES ('docc0', 'wea', to_timestamp('20-06-2017 18:30', 'DD-MM-YYYY hh24:mi'));
-INSERT INTO appointments(doc_username, pat_username, d)
-	VALUES ('docc0', 'wea', to_timestamp('20-06-2017 19:30', 'DD-MM-YYYY hh24:mi'));
-INSERT INTO appointments(doc_username, pat_username, d)
-	VALUES ('docc0', 'wea', to_timestamp('20-06-2017 20:30', 'DD-MM-YYYY hh24:mi'));
-INSERT INTO appointments(doc_username, pat_username, d)
-	VALUES ('docc0', 'wea', to_timestamp('20-06-2017 21:00', 'DD-MM-YYYY hh24:mi'));
-INSERT INTO appointments(doc_username, pat_username, d)
-	VALUES ('docc0', 'wea', to_timestamp('20-06-2017 21:30', 'DD-MM-YYYY hh24:mi'));

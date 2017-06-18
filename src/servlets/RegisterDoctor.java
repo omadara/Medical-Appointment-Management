@@ -20,11 +20,11 @@ public class RegisterDoctor extends HttpServlet {
 		String password = request.getParameter("password");
 		String name = request.getParameter("name");
 		String surname = request.getParameter("surname");
-		if (isEmpty(username) || isEmpty(password) || isEmpty(name) || isEmpty(surname)) {
-			showForm(request, response, "One or more fields are empty");
+		if (ServletUtils.isEmpty(username) || ServletUtils.isEmpty(password) || ServletUtils.isEmpty(name) || ServletUtils.isEmpty(surname)) {
+			ServletUtils.showForm(request, response, "One or more fields are empty", "admin/add.jsp");
 			return;
-		}else if(!isValid(spec)) {
-			showForm(request, response , "Invalid doctor spec");
+		}else if(!ServletUtils.isValidSpec(spec)) {
+			ServletUtils.showForm(request, response , "Invalid doctor spec", "admin/add.jsp");
 			return;
 		}
 		
@@ -35,27 +35,12 @@ public class RegisterDoctor extends HttpServlet {
 		doc.setName(name);
 		doc.setSurname(surname);
 		if(!database.Accounts.register(doc)){
-			showForm(request,response,"Username already in use");
+			ServletUtils.showForm(request,response,"Username already in use", "admin/add.jsp");
 			return;
 		}else{
-			showForm(request,response,"Successful registration of doctor: "+doc.getUsername());
+			ServletUtils.showForm(request,response,"Successful registration of doctor: "+doc.getUsername(), "admin/add.jsp");
 			return;
 		}
 	}
 	
-	/**
-	 *	shows the form with info message
-	 */
-	public static void showForm(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
-		request.setAttribute("message", message);
-		request.getRequestDispatcher("admin/add.jsp").forward(request, response);
-	}
-
-	private boolean isEmpty(String input) {
-		return input == null || input.trim().isEmpty();
-	}
-	
-	private boolean isValid(String spec) {
-		return "pathologos".equalsIgnoreCase(spec) || "ofthalmiatros".equalsIgnoreCase(spec) || "orthopedikos".equalsIgnoreCase(spec);
-	}
 }

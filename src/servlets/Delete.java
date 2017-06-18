@@ -7,47 +7,31 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class Delete
- */
 @WebServlet("/Delete")
 public class Delete extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
 		String acctype = request.getParameter("acctype");
 		String username = request.getParameter("username");
-		if(!isValid(username))
-			showForm(request,response,"wrong input");
-		boolean valid;
-		switch(acctype){
-		case "doctor": 
-			valid = database.Accounts.deleteDoc(username);
-			break;
-		case "patient": 
-			valid = database.Accounts.deletePatient(username);
-			break;
-		default :
-			showForm(request,response,"Nothing to see here, move along. 'Skyrim hold guards'");
+		if(ServletUtils.isEmpty(username)) {
+			ServletUtils.showForm(request, response, "Empty username", "admin/delete.jsp");
+			return;
+		}else if(!ServletUtils.isValidAccType(acctype)) {
+			ServletUtils.showForm(request, response, "Invalid account type", "admin/delete.jsp");
 			return;
 		}
-		if(!valid)
-			showForm(request,response,"Something went wrong, Try again.");
-		else{
-			showForm(request,response,"Succesfully deleted user "+username);
+		boolean success;
+		switch(acctype){
+		case "doctor": success = database.Accounts.deleteDoc(username); break;
+		case "patient": success = database.Accounts.deletePatient(username); break;
+		default :
+			ServletUtils.showForm(request,response,"Invalid account type", "admin/delete.jsp");
+			return;
 		}
-	}
-	
-	private static void showForm(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
-		request.setAttribute("message", message);
-		request.getRequestDispatcher("admin/delete.jsp").forward(request, response);
-	}
-	
-	private boolean isValid(String input){
-		return input == null || input.trim().isEmpty() || !input.trim().equals("*");
+		if(success) ServletUtils.showForm(request,response,"Succesfully deleted user "+username, "admin/delete.jsp");
+		else ServletUtils.showForm(request,response,"Couldnt not find user: "+username, "admin/delete.jsp");
 	}
 
 }

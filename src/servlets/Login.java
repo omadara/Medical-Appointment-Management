@@ -21,11 +21,11 @@ public class Login extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String type = request.getParameter("type");
-		if(isEmpty(username) || isEmpty(password)) {
-			showForm(request, response, "Empty Username or Password");
+		if(ServletUtils.isEmpty(username) || ServletUtils.isEmpty(password)) {
+			ServletUtils.showForm(request, response, "Empty Username or Password", "login.jsp");
 			return;
 		}else if(!"patient".equals(type) && !"doctor".equals(type) && !"admin".equals(type)) {
-			showForm(request, response, "Invalid account type");
+			ServletUtils.showForm(request, response, "Invalid account type", "login.jsp");
 			return;
 		}
 		
@@ -36,7 +36,7 @@ public class Login extends HttpServlet {
 		case "admin": user = Accounts.getAdmin(username, password);break;
 		}
 		if(user == null) {
-			showForm(request, response, "Incorrect Credentials");
+			ServletUtils.showForm(request, response, "Incorrect Credentials", "login.jsp");
 			return;
 		}
 		
@@ -46,18 +46,6 @@ public class Login extends HttpServlet {
 		session.setMaxInactiveInterval(60*60);//one hour
 		//phgene ton sto homepage tou analoga me to typo user
 		request.getRequestDispatcher(type+"/index.jsp").forward(request, response);
-	}
-
-	/**
-	 *	shows the form with info message
-	 */
-	public static void showForm(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
-		request.setAttribute("message", message);
-		request.getRequestDispatcher("login.jsp").forward(request, response);
-	}
-
-	private boolean isEmpty(String input) {
-		return input == null || input.trim().isEmpty();
 	}
 
 }

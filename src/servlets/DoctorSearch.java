@@ -18,7 +18,7 @@ public class DoctorSearch extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String spec = request.getParameter("spec");
-		if(!isValid(spec)) {
+		if(!ServletUtils.isValidSpec(spec)) {
 			request.setAttribute("message", "Invalid doctor spec");
 			request.getRequestDispatcher("patient/newAppointment.jsp").forward(request, response);
 			return;
@@ -27,10 +27,6 @@ public class DoctorSearch extends HttpServlet {
 		List<Availability> doctors =  Scheduler.getAvailableDoctors(spec.toLowerCase(), "2017-06-17 00:00:00", "2017-06-22 23:59:59");
 		request.setAttribute("doctors", doctors);
 		request.getRequestDispatcher("patient/newAppointment.jsp").forward(request, response);
-	}
-
-	private boolean isValid(String spec) {
-		return "pathologos".equalsIgnoreCase(spec) || "ofthalmiatros".equalsIgnoreCase(spec) || "orthopedikos".equalsIgnoreCase(spec);
 	}
 
 }

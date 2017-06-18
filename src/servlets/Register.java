@@ -22,8 +22,8 @@ public class Register extends HttpServlet {
 		String password = request.getParameter("password");
 		String name = request.getParameter("name");
 		String surname = request.getParameter("surname");
-		if (isEmpty(amka) || isEmpty(username) || isEmpty(password) || isEmpty(name) || isEmpty(surname)) {
-			showForm(request, response, "One or more fields are empty");
+		if (ServletUtils.isEmpty(amka) || ServletUtils.isEmpty(username) || ServletUtils.isEmpty(password) || ServletUtils.isEmpty(name) || ServletUtils.isEmpty(surname)) {
+			ServletUtils.showForm(request, response, "One or more fields are empty", "register.jsp");
 			return;
 		}
 		
@@ -34,7 +34,7 @@ public class Register extends HttpServlet {
 		pat.setName(name);
 		pat.setSurname(surname);
 		if(!database.Accounts.register(pat)){
-			showForm(request,response,"AMKA or username already in use");
+			ServletUtils.showForm(request,response,"AMKA or username already in use", "register.jsp");
 			return;
 		}
 		
@@ -43,19 +43,6 @@ public class Register extends HttpServlet {
 		session.setAttribute("user-info", pat);
 		session.setMaxInactiveInterval(60*60);//one hour
 		request.getRequestDispatcher("patient/index.jsp").forward(request, response);
-	}
-	
-
-	/**
-	 *	shows the form with info message
-	 */
-	public static void showForm(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
-		request.setAttribute("message", message);
-		request.getRequestDispatcher("register.jsp").forward(request, response);
-	}
-
-	private boolean isEmpty(String input) {
-		return input == null || input.trim().isEmpty();
 	}
 
 }
