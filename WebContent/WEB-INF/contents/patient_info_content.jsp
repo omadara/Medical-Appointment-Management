@@ -1,6 +1,7 @@
 <%@ page import="mainpackage.Patient, mainpackage.Appointment,
-database.Scheduler, java.util.List" %>
-	<% Patient pat = (Patient)session.getAttribute("user-info"); %>
+database.Scheduler, java.util.List, java.text.SimpleDateFormat" %>
+	<% Patient pat = (Patient)session.getAttribute("user-info"); 
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");%>
 	<table>
 		<tr><td>Username</td><td><%= pat.getUsername() %></td></tr>
 		<tr><td>AMKA</td><td><%= pat.getAmka() %></td></tr>
@@ -20,7 +21,7 @@ database.Scheduler, java.util.List" %>
 		<tr>
 			<td><%= aps.get(i).getDoctor().getName() %></td>
 			<td><%= aps.get(i).getDoctor().getSurname() %></td>
-			<td><%= aps.get(i).getDate() %></td>
+			<td><%= f.format(aps.get(i).getDate()) %></td>
 		</tr>
 	 	<%}%>
  	<%}%>

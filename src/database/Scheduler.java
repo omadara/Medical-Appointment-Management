@@ -23,7 +23,7 @@ import mainpackage.Patient;
 
 @WebListener
 public class Scheduler implements ServletContextListener{
-	private static PreparedStatement stm1, stm2, stm3;
+	private static PreparedStatement stm1, stm2, stm3, stm4;
 	private static Connection con;
 	
 	@Override
@@ -56,6 +56,11 @@ public class Scheduler implements ServletContextListener{
 					+ "INNER JOIN doctor as d ON a.doc_username = d.username \n"
 					+ "WHERE p.username = ? AND a.d >= CURRENT_DATE \n"
 					+ "ORDER BY a.d;");
+			stm4 = con.prepareStatement("SELECT p.name as name,p.surname as surname,a.d as date "
+					+ "FROM appointments as a INNER JOIN patient as p on p.username = a.pat_username "
+					+ "INNER JOIN doctor as d on a.doc_username = d.username "
+					+ "WHERE d.username = ? AND a.d >= CURRENT_DATE "
+					+ "ORDER BY a.d;");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -66,7 +71,7 @@ public class Scheduler implements ServletContextListener{
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		try {
-			stm1.close();stm2.close();stm3.close();
+			stm1.close();stm2.close();stm3.close();stm4.close();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -83,7 +88,7 @@ public class Scheduler implements ServletContextListener{
 				doc.setName(rs.getString("name"));
 				doc.setSurname(rs.getString("surname"));
 				Appointment ap = new Appointment(doc, pat);
-				ap.setDate(rs.getDate("date"));
+				ap.setDate(rs.getTimestamp("date"));
 				aps.add(ap);
 			}
 			return aps;
@@ -136,7 +141,7 @@ public class Scheduler implements ServletContextListener{
 				doc.setName(rs.getString("name"));
 				doc.setSurname(rs.getString("surname"));
 				Appointment ap = new Appointment(doc, pat);
-				ap.setDate(rs.getDate("date"));
+				ap.setDate(rs.getTimestamp("date"));
 				aps.add(ap);
 			}
 			return aps;
@@ -146,7 +151,23 @@ public class Scheduler implements ServletContextListener{
 		return null;
 	}
 	
-	public static List<Appointment> getSchedule(Doctor pat) {
+	public static List<Appointment> getSchedule(Doctor doc) {
+		try {
+			List<Appointment> aps = new ArrayList<>();
+			stm4.setString(1, doc.getUsername());
+			ResultSet rs = stm4.executeQuery();
+			while(rs.next()) {
+				Patient pat = new Patient();
+				pat.setName(rs.getString("name"));
+				pat.setSurname(rs.getString("surname"));
+				Appointment ap = new Appointment(doc, pat);
+				ap.setDate(rs.getTimestamp("date"));
+				aps.add(ap);
+			}
+			return aps;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	

@@ -1,17 +1,17 @@
-<%@ page import="mainpackage.Patient, mainpackage.Appointment,
+<%@ page import="mainpackage.Doctor, mainpackage.Appointment,
 database.Scheduler,java.util.List, java.text.SimpleDateFormat" %>
 <%
-Patient pat = (Patient)session.getAttribute("user-info");
-List<Appointment> aps = Scheduler.getAppointmentHistory(pat);
+Doctor doc = (Doctor)session.getAttribute("user-info");
+List<Appointment> aps = Scheduler.getSchedule(doc);
 SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 %> 
 
 	<!-- CONTENT HERE -->
 	<%if(aps.isEmpty()){ %>
-		<i>Your appointment history is empty.</i>
+		<i>Your appointment schedule is empty.</i>
 	<%}else{%>
 		<table>
-		<tr><th>Doctor's name</th><th>Doctor's surname</th><th>Date</th></tr>
+		<tr><th>Patient's name</th><th>Patient's surname</th><th>Date</th></tr>
 		<%for(int i=0; i<aps.size();i++){%>
 		<tr>
 			<td><%= aps.get(i).getDoctor().getName() %></td>
