@@ -11,6 +11,9 @@ import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 
 import mainpackage.Appointment;
@@ -18,14 +21,13 @@ import mainpackage.Availability;
 import mainpackage.Doctor;
 import mainpackage.Patient;
 
-public class Scheduler {
+@WebListener
+public class Scheduler implements ServletContextListener{
 	private static PreparedStatement stm1, stm2, stm3;
 	private static Connection con;
-	static{
-		initialize();
-	}
-
-	private static void initialize() {
+	
+	@Override
+	public void contextInitialized(ServletContextEvent sce) {
 		try {
 			InitialContext context = new InitialContext();
 			DataSource src = (DataSource) context.lookup("java:comp/env/jdbc/postgres");
@@ -56,6 +58,16 @@ public class Scheduler {
 					+ "ORDER BY a.d;");
 		} catch (NamingException e) {
 			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void contextDestroyed(ServletContextEvent sce) {
+		try {
+			stm1.close();stm2.close();stm3.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

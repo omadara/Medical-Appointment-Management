@@ -7,6 +7,9 @@ import java.sql.SQLException;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 
 import mainpackage.Admin;
@@ -14,14 +17,13 @@ import mainpackage.Doctor;
 import mainpackage.Patient;
 import mainpackage.User;
 
-public class Accounts {
+@WebListener
+public class Accounts implements ServletContextListener{
 	private static PreparedStatement stm1, stm2, stm3, stm4, stm5, stm6, stm7;
 	private static Connection con;
-	static{
-		initialize();
-	}
 	
-	private static void initialize() {
+	@Override
+	public void contextInitialized(ServletContextEvent sce) {
 		try {
 			InitialContext context = new InitialContext();
 			DataSource src = (DataSource) context.lookup("java:comp/env/jdbc/postgres");
@@ -36,6 +38,16 @@ public class Accounts {
 			stm7 = con.prepareStatement("DELETE FROM patient WHERE username = ?");
 		} catch (NamingException e) {
 			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void contextDestroyed(ServletContextEvent sce) {
+		try {
+			stm1.close();stm2.close();stm3.close();stm4.close();stm5.close();stm6.close();stm7.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
