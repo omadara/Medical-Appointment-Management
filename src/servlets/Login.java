@@ -31,9 +31,9 @@ public class Login extends HttpServlet {
 		
 		User user = null;
 		switch(type) {
-		case "patient": user = Accounts.getPatient(username, password);break;
-		case "doctor": user = Accounts.getDoctor(username, password);break;
-		case "admin": user = Accounts.getAdmin(username, password);break;
+		case "patient": user = Accounts.getPatient(username, ServletUtils.encrypt(password));break;
+		case "doctor": user = Accounts.getDoctor(username, ServletUtils.encrypt(password));break;
+		case "admin": user = Accounts.getAdmin(username, ServletUtils.encrypt(password));break;
 		}
 		if(user == null) {
 			ServletUtils.showForm(request, response, "Incorrect Credentials", "login.jsp");

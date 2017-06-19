@@ -31,7 +31,7 @@ public class RegisterDoctor extends HttpServlet {
 		Doctor doc = new Doctor();
 		doc.setSpeciality(spec);
 		doc.setUsername(username);
-		doc.setPassword(password);
+		doc.setPassword(ServletUtils.encrypt(password));
 		doc.setName(name);
 		doc.setSurname(surname);
 		if(!database.Accounts.register(doc)){

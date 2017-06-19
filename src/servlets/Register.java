@@ -30,7 +30,7 @@ public class Register extends HttpServlet {
 		Patient pat = new Patient();
 		pat.setAmka(amka);
 		pat.setUsername(username);
-		pat.setPassword(password);
+		pat.setPassword(ServletUtils.encrypt(password));
 		pat.setName(name);
 		pat.setSurname(surname);
 		if(!database.Accounts.register(pat)){
