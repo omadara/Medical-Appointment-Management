@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import mainpackage.Doctor;
 
-@WebServlet("/RegisterDoctor")
+@WebServlet("/admin/RegisterDoctor")
 public class RegisterDoctor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -21,10 +21,10 @@ public class RegisterDoctor extends HttpServlet {
 		String name = request.getParameter("name");
 		String surname = request.getParameter("surname");
 		if (ServletUtils.isEmpty(username) || ServletUtils.isEmpty(password) || ServletUtils.isEmpty(name) || ServletUtils.isEmpty(surname)) {
-			ServletUtils.showForm(request, response, "One or more fields are empty", "admin/add.jsp");
+			ServletUtils.showForm(request, response, "One or more fields are empty", "add.jsp");
 			return;
 		}else if(!ServletUtils.isValidSpec(spec)) {
-			ServletUtils.showForm(request, response , "Invalid doctor spec", "admin/add.jsp");
+			ServletUtils.showForm(request, response , "Invalid doctor spec", "add.jsp");
 			return;
 		}
 		
@@ -35,10 +35,10 @@ public class RegisterDoctor extends HttpServlet {
 		doc.setName(name);
 		doc.setSurname(surname);
 		if(!database.Accounts.register(doc)){
-			ServletUtils.showForm(request,response,"Username already in use", "admin/add.jsp");
+			ServletUtils.showForm(request,response,"Username already in use", "add.jsp");
 			return;
 		}else{
-			ServletUtils.showForm(request,response,"Successful registration of doctor: "+doc.getUsername(), "admin/add.jsp");
+			ServletUtils.showForm(request,response,"Successful registration of doctor: "+doc.getUsername(), "add.jsp");
 			return;
 		}
 	}

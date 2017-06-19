@@ -6,7 +6,7 @@
 SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 if(doctors==null) {%>
 	<b>Search doctors by specialty:</b><br>
-	<form action="${pageContext.request.contextPath}/DoctorSearch" method="POST">
+	<form action="${pageContext.request.contextPath}/patient/DoctorSearch" method="POST">
 	  <input type="radio" name="spec" value="pathologos" checked> Pathologos<br>
 	  <input type="radio" name="spec" value="ofthalmiatros"> Ofthalmiatros<br>
 	  <input type="radio" name="spec" value="orthopedikos"> Orthopedikos<br>

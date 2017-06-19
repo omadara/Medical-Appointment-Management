@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import database.Scheduler;
 import mainpackage.Availability;
 
-@WebServlet("/DoctorSearch")
+@WebServlet("/patient/DoctorSearch")
 public class DoctorSearch extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -20,13 +20,13 @@ public class DoctorSearch extends HttpServlet {
 		String spec = request.getParameter("spec");
 		if(!ServletUtils.isValidSpec(spec)) {
 			request.setAttribute("message", "Invalid doctor spec");
-			request.getRequestDispatcher("patient/newAppointment.jsp").forward(request, response);
+			request.getRequestDispatcher("newAppointment.jsp").forward(request, response);
 			return;
 		}
 		//TODO na parnei tis imerominies apo to POST
 		List<Availability> doctors =  Scheduler.getAvailableDoctors(spec.toLowerCase(), "2017-06-17 00:00:00", "2017-06-22 23:59:59");
 		request.setAttribute("doctors", doctors);
-		request.getRequestDispatcher("patient/newAppointment.jsp").forward(request, response);
+		request.getRequestDispatcher("newAppointment.jsp").forward(request, response);
 	}
 
 }

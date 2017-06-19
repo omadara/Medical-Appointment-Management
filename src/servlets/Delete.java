@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/Delete")
+@WebServlet("/admin/Delete")
 public class Delete extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -16,10 +16,10 @@ public class Delete extends HttpServlet {
 		String acctype = request.getParameter("acctype");
 		String username = request.getParameter("username");
 		if(ServletUtils.isEmpty(username)) {
-			ServletUtils.showForm(request, response, "Empty username", "admin/delete.jsp");
+			ServletUtils.showForm(request, response, "Empty username", "delete.jsp");
 			return;
 		}else if(!ServletUtils.isValidAccType(acctype)) {
-			ServletUtils.showForm(request, response, "Invalid account type", "admin/delete.jsp");
+			ServletUtils.showForm(request, response, "Invalid account type", "delete.jsp");
 			return;
 		}
 		boolean success;
@@ -27,11 +27,11 @@ public class Delete extends HttpServlet {
 		case "doctor": success = database.Accounts.deleteDoc(username); break;
 		case "patient": success = database.Accounts.deletePatient(username); break;
 		default :
-			ServletUtils.showForm(request,response,"Invalid account type", "admin/delete.jsp");
+			ServletUtils.showForm(request,response,"Invalid account type", "delete.jsp");
 			return;
 		}
-		if(success) ServletUtils.showForm(request,response,"Succesfully deleted user "+username, "admin/delete.jsp");
-		else ServletUtils.showForm(request,response,"Couldnt not find user: "+username, "admin/delete.jsp");
+		if(success) ServletUtils.showForm(request,response,"Succesfully deleted user "+username, "delete.jsp");
+		else ServletUtils.showForm(request,response,"Couldnt not find user: "+username, "delete.jsp");
 	}
 
 }
