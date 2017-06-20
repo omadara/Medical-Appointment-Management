@@ -116,8 +116,7 @@ public class Accounts implements ServletContextListener{
 			stm2.setString(3, pat.getPassword());
 			stm2.setString(4, pat.getName());
 			stm2.setString(5, pat.getSurname());
-			stm2.executeUpdate();
-			return true;
+			return stm2.executeUpdate() != 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -131,8 +130,7 @@ public class Accounts implements ServletContextListener{
 			stm5.setString(3, doc.getName());
 			stm5.setString(4, doc.getSurname());
 			stm5.setString(5, doc.getSpeciality());
-			stm5.executeUpdate();
-			return true;
+			return stm5.executeUpdate() != 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;

@@ -43,29 +43,29 @@ CREATE TABLE appointments (
 );
 
 INSERT INTO admin (username, password, name, surname)
-	VALUES ('admin', 'pass', 'admin', 'admin');
+	VALUES ('admin', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', 'admin', 'admin');
 INSERT INTO admin (username, password, name, surname)
-	VALUES ('1admin', 'pass', '1admin', '1admin');
+	VALUES ('1admin', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', '1admin', '1admin');
 
 INSERT INTO patient (username, password, amka, name, surname)
-	VALUES ('asth1', 'pass', '01234567891', 'John', 'Jojn');
+	VALUES ('asth1', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', '01234567891', 'John', 'Jojn');
 INSERT INTO patient (username, password, amka, name, surname)
-	VALUES ('eco', 'pass', '01234567892', 'Mak', 'JJojn');
+	VALUES ('eco', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', '01234567892', 'Mak', 'JJojn');
 INSERT INTO patient (username, password, amka, name, surname)
-	VALUES ('wea', 'pass', '01234567893', 'Hvt', 'JIJojn');
+	VALUES ('wea', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', '01234567893', 'Hvt', 'JIJojn');
 INSERT INTO patient (username, password, amka, name, surname)
-	VALUES ('cd', 'pass', '01234567894', 'Kl', 'JoJJjn');
+	VALUES ('cd', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', '01234567894', 'Kl', 'JoJJjn');
 
 INSERT INTO doctor (username, password, spec, name, surname)
-	VALUES ('docc', 'pass', 'ofthalmiatros', 'Mik', 'PPP');
+	VALUES ('docc', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', 'ofthalmiatros', 'Mik', 'PPP');
 INSERT INTO doctor (username, password, spec, name, surname)
-	VALUES('docc2', 'pass', 'ofthalmiatros', 'Gkk', 'Rpro');
+	VALUES('docc2', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', 'ofthalmiatros', 'Gkk', 'Rpro');
 INSERT INTO doctor (username, password, spec, name, surname)
-	VALUES ('docc3', 'pass', 'orthopedikos', 'eur', 'liii');
+	VALUES ('docc3', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', 'orthopedikos', 'eur', 'liii');
 INSERT INTO doctor (username, password, spec, name, surname)
-	VALUES ('docc5', 'pass', 'pathologos', 'wee', 'PPP');
+	VALUES ('docc5', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', 'pathologos', 'wee', 'PPP');
 INSERT INTO doctor (username, password, spec, name, surname)
-	VALUES ('docc0', 'pass', 'pathologos', 'rrr', 'PPP');
+	VALUES ('docc0', 'jVW3YvPMuCltmsq2/S3UsEpT3oM=', 'pathologos', 'rrr', 'PPP');
 
 INSERT INTO availabillity (username, d_start, d_end)
 	VALUES ('docc', to_timestamp('18-06-2017 09:30', 'DD-MM-YYYY hh24:mi'),to_timestamp('18-06-2017 10:30', 'DD-MM-YYYY hh24:mi'));
