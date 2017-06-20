@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.naming.InitialContext;
@@ -23,7 +22,7 @@ import mainpackage.Patient;
 
 @WebListener
 public class Scheduler implements ServletContextListener{
-	private static PreparedStatement stm1, stm2, stm3, stm4, stm5, stm6;
+	private static PreparedStatement stm1, stm2, stm3, stm4, stm5, stm6, stm7, stm8, stm9;
 	private static Connection con;
 
 	@Override
@@ -77,7 +76,16 @@ public class Scheduler implements ServletContextListener{
 			stm6 = con.prepareStatement(
 					  "INSERT INTO appointments (doc_username, pat_username, d) "
 					+ "VALUES (?, ?, to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS' ));");
-
+			
+			stm7 = con.prepareStatement("SELECT * \r\n" + 
+					"FROM doctor as d NATURAL JOIN availabillity as av INNER JOIN appointments as ap ON ap.doc_username=d.username \r\n" + 
+					"WHERE d.username= ? AND ( \r\n" + 
+					"	ap.d BETWEEN ?::timestamp AND ?::timestamp \r\n" + 
+					"    OR av.d_start BETWEEN ?::timestamp AND ?::timestamp \r\n" + 
+					"	OR (av.d_end BETWEEN ?::timestamp AND ?::timestamp ) \r\n" + 
+					"    OR (av.d_start <= ?::timestamp AND ?::timestamp <= av.d_end)) LIMIT 1;");
+			stm8 = con.prepareStatement("INSERT INTO availabillity VALUES( ? , ?::timestamp , ?::timestamp );");
+			stm9 = con.prepareStatement("SELECT d_start as start, d_end as end FROM availabillity WHERE username = ? ORDER BY start; ");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -88,7 +96,7 @@ public class Scheduler implements ServletContextListener{
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		try {
-			stm1.close();stm2.close();stm3.close();stm4.close();stm5.close();stm6.close();
+			stm1.close();stm2.close();stm3.close();stm4.close();stm5.close();stm6.close();stm7.close();stm8.close();stm9.close();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -188,7 +196,6 @@ public class Scheduler implements ServletContextListener{
 		return null;
 	}
 
-
 	public static boolean isDoctorAvailable(String doctorUserName, String date){
 		try{
 			stm5.setString(1, doctorUserName);
@@ -221,16 +228,49 @@ public class Scheduler implements ServletContextListener{
 		return scheduleAppointment(pat, doc.getUsername(), date);
 	}
 
+	public static boolean setAvailable(Doctor doc, String start, String end) {
+		try {
+			stm7.setString(1, doc.getUsername());
+			stm7.setString(2, start);
+			stm7.setString(3, end);
+			stm7.setString(4, start);
+			stm7.setString(5, end);
+			stm7.setString(6, start);
+			stm7.setString(7, end);
+			stm7.setString(8, start);
+			stm7.setString(9, end);
+			//an yparxei estw mia tetoia pleiada tote to diasthma (start,end) den einai egkyro
+			if(stm7.executeQuery().isBeforeFirst()) return false;
+			stm8.setString(1, doc.getUsername());
+			stm8.setString(2, start);
+			stm8.setString(3, end);
+			return stm8.executeUpdate() != 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static List<Availability> getAvailableTimeSpans(Doctor doc) {
+		List<Availability> avs = new ArrayList<>();
+		try {
+			stm9.setString(1, doc.getUsername());
+			ResultSet rs = stm9.executeQuery();
+			while(rs.next()) {
+				avs.add(new Availability(doc, rs.getTimestamp("start"), rs.getTimestamp("end")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return avs;
+	}
+
 	public static boolean cancelAppointment(Appointment a) {
 		return false;
 	}
 
 	public static List<Appointment> getAllAppointments() {
 		return null;
-	}
-
-	public static boolean setAvailable(Doctor doc, Date start, Date end) {
-		return false;
 	}
 
 	public static List<Appointment> search(Doctor doc) {
