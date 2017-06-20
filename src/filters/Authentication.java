@@ -31,12 +31,15 @@ public class Authentication implements Filter {
 		HttpServletRequest req = (HttpServletRequest)request;
 		HttpServletResponse res = (HttpServletResponse)response;
 		HttpSession session = req.getSession(false);
-	
+
+		res.setCharacterEncoding("UTF-8");
+		req.setCharacterEncoding("UTF-8");
+		
 		// gia na pernei ola request apo ton server kai oxi apo tin cache tou browser
 		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		res.setHeader("Pragma", "no-cache");
 		res.setDateHeader("Expires", 0);
-        
+		
 		String reqURL = req.getServletPath().toLowerCase();
 		User user = session!=null ? (User)session.getAttribute("user-info") : null;
 		boolean loggedIn = user != null;

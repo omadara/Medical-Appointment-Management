@@ -1,4 +1,5 @@
-<%@ page import="mainpackage.Availability, java.util.List, java.net.URLEncoder, java.sql.Timestamp, java.text.SimpleDateFormat" %>
+<%@ page import="mainpackage.Availability, java.util.List, java.net.URLEncoder,
+java.sql.Timestamp, java.text.SimpleDateFormat" %>
 <div id="info-message">
 	${message}
 </div>

@@ -1,11 +1,11 @@
 package mainpackage;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Appointment {
 	private Doctor doctor;
 	private Patient patient;
-	private Date date;
+	private Timestamp date;
 	
 	public Appointment(Doctor doctor, Patient patient) {
 		this.doctor = doctor;
@@ -28,11 +28,11 @@ public class Appointment {
 		this.patient = patient;
 	}
 
-	public Date getDate() {
+	public Timestamp getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(Timestamp date) {
 		this.date = date;
 	}
 	

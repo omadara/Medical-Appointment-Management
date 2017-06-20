@@ -22,7 +22,7 @@ import mainpackage.Patient;
 
 @WebListener
 public class Scheduler implements ServletContextListener{
-	private static PreparedStatement stm1, stm2, stm3, stm4, stm5, stm6, stm7, stm8, stm9;
+	private static PreparedStatement stm1, stm2, stm3, stm4, stm5, stm6, stm7, stm8, stm9, stm10;
 	private static Connection con;
 
 	@Override
@@ -36,7 +36,7 @@ public class Scheduler implements ServletContextListener{
 					  "SELECT d.name as name,d.surname as surname,a.d as date "
 					+ "FROM appointments as a INNER JOIN patient as p ON p.username = a.pat_username "
 					+ "INNER JOIN doctor as d ON a.doc_username = d.username "
-					+ "WHERE p.username = ? AND a.d < CURRENT_DATE "
+					+ "WHERE p.username = ? AND a.d < CURRENT_TIMESTAMP "
 					+ "ORDER BY a.d");
 			stm2= con.prepareStatement(
 					  "SELECT * "
@@ -50,15 +50,16 @@ public class Scheduler implements ServletContextListener{
 					+ "WHERE (r.username, r.avail_h) NOT IN "
 					+ "( SELECT doc_username as username, d as avail_h FROM appointments);");
 			stm3 = con.prepareStatement(
-					  "SELECT d.name as name,d.surname as surname,a.d as date "
+					  "SELECT d.username as username, d.name as name,d.surname as surname,a.d as date "
 					+ "FROM appointments as a INNER JOIN patient as p ON p.username = a.pat_username "
 					+ "INNER JOIN doctor as d ON a.doc_username = d.username "
-					+ "WHERE p.username = ? AND a.d >= CURRENT_DATE "
+					+ "WHERE p.username = ? AND a.d >= CURRENT_TIMESTAMP "
 					+ "ORDER BY a.d;");
-			stm4 = con.prepareStatement("SELECT p.name as name,p.surname as surname,a.d as date "
+			stm4 = con.prepareStatement(
+					  "SELECT p.username as username, p.name as name,p.surname as surname,a.d as date "
 					+ "FROM appointments as a INNER JOIN patient as p on p.username = a.pat_username "
 					+ "INNER JOIN doctor as d on a.doc_username = d.username "
-					+ "WHERE d.username = ? AND a.d >= CURRENT_DATE "
+					+ "WHERE d.username = ? AND a.d >= CURRENT_TIMESTAMP "
 					+ "ORDER BY a.d;");
 
 			stm5 = con.prepareStatement(
@@ -76,16 +77,27 @@ public class Scheduler implements ServletContextListener{
 			stm6 = con.prepareStatement(
 					  "INSERT INTO appointments (doc_username, pat_username, d) "
 					+ "VALUES (?, ?, to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS' ));");
-			
-			stm7 = con.prepareStatement("SELECT * \r\n" + 
-					"FROM doctor as d NATURAL JOIN availabillity as av INNER JOIN appointments as ap ON ap.doc_username=d.username \r\n" + 
-					"WHERE d.username= ? AND ( \r\n" + 
-					"	ap.d BETWEEN ?::timestamp AND ?::timestamp \r\n" + 
-					"    OR av.d_start BETWEEN ?::timestamp AND ?::timestamp \r\n" + 
-					"	OR (av.d_end BETWEEN ?::timestamp AND ?::timestamp ) \r\n" + 
-					"    OR (av.d_start <= ?::timestamp AND ?::timestamp <= av.d_end)) LIMIT 1;");
+
+			stm7 = con.prepareStatement(
+					  "SELECT * "
+					+ "FROM doctor as d NATURAL JOIN availabillity as av "
+					+ "	INNER JOIN appointments as ap ON ap.doc_username=d.username "
+					+ "WHERE d.username= ? AND ( "
+					+ "		(ap.d BETWEEN ?::timestamp AND ?::timestamp) "
+					+ "		OR (av.d_start BETWEEN ?::timestamp AND ?::timestamp) "
+					+ "		OR (av.d_end BETWEEN ?::timestamp AND ?::timestamp ) "
+					+ "		OR (av.d_start <= ?::timestamp AND ?::timestamp <= av.d_end)"
+					+ "	) LIMIT 1;");
+
+
 			stm8 = con.prepareStatement("INSERT INTO availabillity VALUES( ? , ?::timestamp , ?::timestamp );");
+
 			stm9 = con.prepareStatement("SELECT d_start as start, d_end as end FROM availabillity WHERE username = ? ORDER BY start; ");
+
+			stm10 = con.prepareStatement(
+					  "DELETE FROM appointments "
+					+ "WHERE doc_username = ? AND pat_username = ? AND d = ?::timestamp "
+					+ "AND d >= CURRENT_TIMESTAMP + interval '3' day ;");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -96,7 +108,7 @@ public class Scheduler implements ServletContextListener{
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		try {
-			stm1.close();stm2.close();stm3.close();stm4.close();stm5.close();stm6.close();stm7.close();stm8.close();stm9.close();
+			stm1.close();stm2.close();stm3.close();stm4.close();stm5.close();stm6.close();stm7.close();stm8.close();stm9.close();stm10.close();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -163,6 +175,7 @@ public class Scheduler implements ServletContextListener{
 			ResultSet rs = stm3.executeQuery();
 			while(rs.next()) {
 				Doctor doc = new Doctor();
+				doc.setUsername(rs.getString("username"));
 				doc.setName(rs.getString("name"));
 				doc.setSurname(rs.getString("surname"));
 				Appointment ap = new Appointment(doc, pat);
@@ -183,6 +196,7 @@ public class Scheduler implements ServletContextListener{
 			ResultSet rs = stm4.executeQuery();
 			while(rs.next()) {
 				Patient pat = new Patient();
+				pat.setUsername(rs.getString("username"));
 				pat.setName(rs.getString("name"));
 				pat.setSurname(rs.getString("surname"));
 				Appointment ap = new Appointment(doc, pat);
@@ -250,7 +264,7 @@ public class Scheduler implements ServletContextListener{
 		}
 		return false;
 	}
-	
+
 	public static List<Availability> getAvailableTimeSpans(Doctor doc) {
 		List<Availability> avs = new ArrayList<>();
 		try {
@@ -265,9 +279,32 @@ public class Scheduler implements ServletContextListener{
 		return avs;
 	}
 
+	public static boolean cancelAppointment(String doctorUsername, String patientUsername, String date) {
+		try{
+			stm10.setString(1, doctorUsername);
+			stm10.setString(2, patientUsername);
+			stm10.setString(3, date);
+			return stm10.executeUpdate() != 0;
+		}catch(SQLException e){
+			e.printStackTrace();
+
+		}
+		return false;
+	}
+
+	public static boolean cancelAppointment(String doctorUsername, Patient pat, String date) {
+		return cancelAppointment(doctorUsername, pat.getUsername(), date);
+	}
+
+	public static boolean cancelAppointment(Doctor doc, String patientUsername, String date) {
+		return cancelAppointment(doc.getUsername(), patientUsername, date);
+	}
+
+	/*
 	public static boolean cancelAppointment(Appointment a) {
 		return false;
 	}
+	*/
 
 	public static List<Appointment> getAllAppointments() {
 		return null;

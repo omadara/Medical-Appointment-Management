@@ -1,4 +1,4 @@
-<%@ page import="mainpackage.Patient, mainpackage.Appointment,
+<%@ page import="mainpackage.Patient, mainpackage.Appointment, java.sql.Timestamp,
 database.Scheduler,java.util.List, java.text.SimpleDateFormat" %>
 <%
 Patient pat = (Patient)session.getAttribute("user-info");
