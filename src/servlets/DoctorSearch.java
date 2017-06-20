@@ -35,17 +35,19 @@ public class DoctorSearch extends HttpServlet {
 		}
 
 		String startDate = request.getParameter("sDate");
-
+		String currentDate  = new SimpleDateFormat("yyyy-MM-dd").format(new Timestamp(System.currentTimeMillis()));
 		if(ServletUtils.isEmpty(startDate)){
-			startDate = new SimpleDateFormat("yyyy-MM-dd").format(new Timestamp(System.currentTimeMillis()));
+			startDate = currentDate;
 		}
 
 		startDate+=" 00:00:00";
+		currentDate+=" 00:00:00";
 
 		Timestamp st,et;
 		long millisPerDay = TimeUnit.DAYS.toMillis(1);
 		try{
 			st = Timestamp.valueOf(startDate);
+			if(st.before(Timestamp.valueOf(currentDate))) st = Timestamp.valueOf(currentDate);
 			et = new Timestamp(st.getTime()+ 7 * millisPerDay);
 		}catch (IllegalArgumentException ie){
 			ServletUtils.showForm(request, response, "Bad date format! must be yyyy-mm-dd", "newAppointment.jsp");

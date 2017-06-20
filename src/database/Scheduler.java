@@ -48,7 +48,8 @@ public class Scheduler implements ServletContextListener{
 					+ " 	AND a.d_end <= to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS' ) "
 					+ "	ORDER BY d.username,a.d_start) as r "
 					+ "WHERE (r.username, r.avail_h) NOT IN "
-					+ "( SELECT doc_username as username, d as avail_h FROM appointments);");
+					+ "( SELECT doc_username as username, d as avail_h FROM appointments) "
+					+ "AND avail_h >= CURRENT_TIMESTAMP;");
 			stm3 = con.prepareStatement(
 					  "SELECT d.username as username, d.name as name,d.surname as surname,a.d as date "
 					+ "FROM appointments as a INNER JOIN patient as p ON p.username = a.pat_username "
@@ -86,7 +87,7 @@ public class Scheduler implements ServletContextListener{
 					+ "		(ap.d BETWEEN ?::timestamp AND ?::timestamp) "
 					+ "		OR (av.d_start BETWEEN ?::timestamp AND ?::timestamp) "
 					+ "		OR (av.d_end BETWEEN ?::timestamp AND ?::timestamp ) "
-					+ "		OR (av.d_start <= ?::timestamp AND ?::timestamp <= av.d_end)"
+					+ "		OR (av.d_start <= ?::timestamp AND ?::timestamp <= av.d_end) "
 					+ "	) LIMIT 1;");
 
 
