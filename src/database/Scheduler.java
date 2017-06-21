@@ -93,7 +93,7 @@ public class Scheduler implements ServletContextListener{
 
 			stm8 = con.prepareStatement("INSERT INTO availabillity VALUES( ? , ?::timestamp , ?::timestamp );");
 
-			stm9 = con.prepareStatement("SELECT d_start as start, d_end as end FROM availabillity WHERE username = ? ORDER BY start; ");
+			stm9 = con.prepareStatement("SELECT d_start as start, d_end as end FROM availabillity WHERE username = ? AND d_end >= CURRENT_TIMESTAMP ORDER BY start; ");
 
 			stm10 = con.prepareStatement(
 					  "DELETE FROM appointments "
