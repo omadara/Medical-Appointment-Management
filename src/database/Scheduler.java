@@ -44,12 +44,12 @@ public class Scheduler implements ServletContextListener{
 					+ "	SELECT d.username, d.surname, d.name, "
 					+ "		generate_series(a.d_start, a.d_end, interval '30 minutes') as avail_h "
 					+ "	FROM doctor as d NATURAL JOIN availabillity as a "
-					+ "	WHERE d.spec::varchar = ? AND a.d_start >= to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS' ) "
-					+ " 	AND a.d_end <= to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS' ) "
+					+ "	WHERE d.spec::varchar = ? "
 					+ "	ORDER BY d.username,a.d_start) as r "
 					+ "WHERE (r.username, r.avail_h) NOT IN "
 					+ "( SELECT doc_username as username, d as avail_h FROM appointments) "
-					+ "AND avail_h >= CURRENT_TIMESTAMP;");
+					+ "AND avail_h >= CURRENT_TIMESTAMP  AND avail_h >= to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS' ) "
+					+ "AND avail_h < to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS' );");
 			stm3 = con.prepareStatement(
 					  "SELECT d.username as username, d.name as name,d.surname as surname,a.d as date "
 					+ "FROM appointments as a INNER JOIN patient as p ON p.username = a.pat_username "
