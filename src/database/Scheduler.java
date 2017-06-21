@@ -136,7 +136,6 @@ public class Scheduler implements ServletContextListener{
 		return null;
 	}
 
-	//NOTE check gia bugs
 	public static List<Availability> getAvailableDoctors(String spec, String start, String end) {
 		try {
 			List<Availability> avs = new ArrayList<>();
@@ -288,7 +287,6 @@ public class Scheduler implements ServletContextListener{
 			return stm10.executeUpdate() != 0;
 		}catch(SQLException e){
 			e.printStackTrace();
-
 		}
 		return false;
 	}
@@ -299,24 +297,6 @@ public class Scheduler implements ServletContextListener{
 
 	public static boolean cancelAppointment(Doctor doc, String patientUsername, String date) {
 		return cancelAppointment(doc.getUsername(), patientUsername, date);
-	}
-
-	/*
-	public static boolean cancelAppointment(Appointment a) {
-		return false;
-	}
-	*/
-
-	public static List<Appointment> getAllAppointments() {
-		return null;
-	}
-
-	public static List<Appointment> search(Doctor doc) {
-		return null;
-	}
-
-	public static List<Appointment> search(String spec) {
-		return null;
 	}
 
 }

@@ -45,8 +45,4 @@ public class CancelAppointment extends HttpServlet {
 		ServletUtils.showForm(request, response, "please try again", "index.jsp");
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
-
 }

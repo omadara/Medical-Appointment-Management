@@ -20,9 +20,6 @@ import mainpackage.Availability;
 public class DoctorSearch extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	//TODO: na arxizei i evdomada panta apo kuriaki
-	//na min mporei na vlepei perasmenes vdomades
-	//na krataei to scroll tis selidas otan pataei ta velakia
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String spec = request.getParameter("spec");
 
@@ -71,10 +68,6 @@ public class DoctorSearch extends HttpServlet {
 		request.setAttribute("prev", prev);
 		request.getRequestDispatcher("newAppointment.jsp").forward(request, response);
 
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 }

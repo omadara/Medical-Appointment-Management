@@ -14,7 +14,6 @@ public class RegisterDoctor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
 		String spec = request.getParameter("spec");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");

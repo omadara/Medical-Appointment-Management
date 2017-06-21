@@ -156,9 +156,5 @@ public class Accounts implements ServletContextListener{
 			 return false;
 		 }
 	 }
-	
-	public static boolean ban(User user) {
-		return false;
-	}
-	
+
 }

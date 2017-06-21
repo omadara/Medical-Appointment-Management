@@ -12,7 +12,6 @@ public class Delete extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setCharacterEncoding("UTF-8");
 		String acctype = request.getParameter("acctype");
 		String username = request.getParameter("username");
 		if(ServletUtils.isEmpty(username)) {

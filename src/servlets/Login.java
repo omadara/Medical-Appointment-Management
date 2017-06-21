@@ -17,7 +17,6 @@ public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String type = request.getParameter("type");

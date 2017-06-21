@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -54,7 +55,10 @@ public class Authentication implements Filter {
 			return;
 		}
 		if(!loggedIn && !visibleURL) {
-			ServletUtils.showForm(req, res, "Please login first.", "login.jsp");
+			req.setAttribute("message", "Please login first.");
+			//xreiazomaste to dispatcher apo to context gia "apolytes" diadromes mesa sto servlet
+			//enw to dispatcher apo to request dinei mono se "topikes" diadromes apo to teleutaio "fakelo" pou klh8hke
+			req.getServletContext().getRequestDispatcher("/login.jsp").forward(req, res);
 			return;
 		}
 		
@@ -88,7 +92,6 @@ public class Authentication implements Filter {
 		return false;
 	}
 	
-	//NOTE: min ta svisete, m petaei error xoris auta
 	public void init(FilterConfig conf){ ;}
 	public void destroy(){ ;}
 
